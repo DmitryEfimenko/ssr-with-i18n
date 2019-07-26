@@ -10,7 +10,7 @@ import { TranslateCacheModule, TranslateCacheService, TranslateCacheSettings } f
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-        useFactory: httpLoaderFactory,
+        useFactory: translateLoaderFactory,
         deps: [HttpClient]
       }
     }),
@@ -33,12 +33,12 @@ export class I18nModule {
     translateCacheService.init();
     translate.addLangs(['en', 'ru']);
 
-    const browserLang = translateCacheService.getCachedLanguage() || translate.getBrowserLang();
+    const browserLang = 'en'; // translateCacheService.getCachedLanguage() || translate.getBrowserLang();
     translate.use(browserLang.match(/en|ru/) ? browserLang : 'en');
   }
 }
 
-export function httpLoaderFactory(httpClient: HttpClient) {
+export function translateLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient);
 }
 

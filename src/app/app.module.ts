@@ -15,7 +15,7 @@ import { SelectLanguageComponent } from './select-language/select-language.compo
     SelectLanguageComponent,
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     I18nModule
   ],
   providers: [],
