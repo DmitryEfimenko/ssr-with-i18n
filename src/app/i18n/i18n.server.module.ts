@@ -10,12 +10,10 @@ import { Observable, of } from 'rxjs';
 
 @NgModule({
   imports: [
-    ServerTransferStateModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-        useFactory: translateFSLoaderFactory,
-        deps: [TransferState]
+        useFactory: translateFSLoaderFactory
       }
     })
   ]
@@ -30,7 +28,7 @@ export class I18nServerModule {
 }
 
 export class TranslateFSLoader implements TranslateLoader {
-  constructor(private transferState: TransferState, private prefix = 'i18n', private suffix = '.json') { }
+  constructor(private prefix = 'i18n', private suffix = '.json') { }
 
   /**
    * Gets the translations from the server, store them in the transfer state
@@ -39,13 +37,10 @@ export class TranslateFSLoader implements TranslateLoader {
     const path = join(__dirname, '../browser/assets/', this.prefix, `${lang}${this.suffix}`);
     const data = JSON.parse(readFileSync(path, 'utf8'));
 
-    const key = makeStateKey<any>('transfer-translate-' + lang);
-    this.transferState.set(key, data);
-
     return of(data);
   }
 }
 
-export function translateFSLoaderFactory(transferState: TransferState) {
-  return new TranslateFSLoader(transferState);
+export function translateFSLoaderFactory() {
+  return new TranslateFSLoader();
 }
