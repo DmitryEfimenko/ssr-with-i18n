@@ -1,7 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Inject, NgModule, Optional, PLATFORM_ID } from '@angular/core';
-import { BrowserTransferStateModule, TransferState } from '@angular/platform-browser';
 import { REQUEST } from '@nguniversal/express-engine/tokens';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Request } from 'express';
@@ -11,13 +10,12 @@ import { translateLoaderFactory } from './translate-loaders';
 
 @NgModule({
   imports: [
-    BrowserTransferStateModule,
     HttpClientModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
         useFactory: translateLoaderFactory,
-        deps: [HttpClient, TransferState, PLATFORM_ID]
+        deps: [HttpClient, PLATFORM_ID]
       }
     }),
     TranslateCacheModule.forRoot({
@@ -46,7 +44,7 @@ export class I18nModule {
 
     const browserLang = isPlatformBrowser(this.platform)
       ? translateCacheService.getCachedLanguage() || translate.getBrowserLang() || 'en'
-      : this.getLangFromServerSideCookie();
+      : this.getLangFromServerSideCookie() || 'en';
 
     translate.use(browserLang.match(/en|ru/) ? browserLang : 'en');
   }
