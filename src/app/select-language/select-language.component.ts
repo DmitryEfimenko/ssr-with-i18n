@@ -5,7 +5,11 @@ import { TranslateService } from '@ngx-translate/core';
   selector: 'app-select-language',
   template: `
     <select #langSelect (change)="translate.use(langSelect.value)">
-      <option *ngFor="let lang of translate.getLangs()" [value]="lang" [selected]="lang === translate.currentLang">{{ lang }}</option>
+      <option
+        *ngFor="let lang of translate.getLangs()"
+        [value]="lang"
+        [attr.selected]="lang === translate.currentLang ? '' : null"
+      >{{lang}}</option>
     </select>
   `,
 })
