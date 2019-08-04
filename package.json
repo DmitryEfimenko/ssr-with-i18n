@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "npm run hash:i18n && ng serve",
     "build": "ng build",
     "build:prod": "ng build --prod",
     "test": "ng test",
@@ -11,8 +11,9 @@
     "e2e": "ng e2e",
     "compile:server": "webpack --config webpack.server.config.js --progress --colors",
     "serve:ssr": "node dist/server",
-    "build:ssr": "npm run build:client-and-server-bundles && npm run compile:server",
-    "build:client-and-server-bundles": "ng build --prod && ng run ssr-with-i18n:server:production --bundleDependencies all"
+    "build:ssr": "npm run hash:i18n && npm run build:client-and-server-bundles && npm run compile:server",
+    "build:client-and-server-bundles": "ng build --prod && ng run ssr-with-i18n:server:production --bundleDependencies all",
+    "hash:i18n": "node scripts/hash-translations.js"
   },
   "private": true,
   "dependencies": {
@@ -54,6 +55,7 @@
     "karma-coverage-istanbul-reporter": "~2.0.1",
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.4.0",
+    "md5": "^2.2.1",
     "protractor": "~5.4.0",
     "ts-loader": "^5.2.0",
     "ts-node": "~7.0.0",
