@@ -27,13 +27,17 @@ export class TranslateBrowserLoader implements TranslateLoader {
 }
 
 export class TranslateFSLoader implements TranslateLoader {
-  constructor(private transferState: TransferState, private prefix = './assets/i18n', private suffix = '.json') { }
+  constructor(
+    private transferState: TransferState,
+    private prefix = './assets/i18n/',
+    private suffix = '.json'
+  ) { }
 
   /**
    * Gets the translations from the server, store them in the transfer state
    */
   public getTranslation(lang: string): Observable<any> {
-    const path = join(__dirname, '../browser', this.prefix, `${lang}${this.suffix}`);
+    const path = join(__dirname, '../browser', this.prefix, `${lang}.${this.suffix}`);
     const data = JSON.parse(readFileSync(path, 'utf8'));
 
     const key = makeStateKey<any>('transfer-translate-' + lang);

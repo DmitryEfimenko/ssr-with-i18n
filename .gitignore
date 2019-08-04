@@ -40,6 +40,7 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+src/assets/i18n/autogen/*
 
 # System Files
 .DS_Store
