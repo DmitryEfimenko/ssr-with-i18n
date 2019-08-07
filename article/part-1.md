@@ -5,7 +5,7 @@
 
 ## The Background on Being Lost
 
-So, I'm a married developer and while I love my wife and love being married, marriage can be difficult. Communication can be difficult. Not to mention the added layer of English being my second language and my wife's first language. 
+So, I'm a married. While I love my wife and love being married, marriage can be difficult. Communication can be difficult. Not to mention the added layer of English being my second language and my wife's first language. 
 
 The last couple of months I have been working on a project at work, that like oh-so-many projects, involves translation strings. I kept pushing what I though was the finalized version of the project to production only to find out that the translation strings from the translation team were holding the project back. I then did a deep dive into i18n for Angular applications. 
 
