@@ -13,7 +13,7 @@ What does i18n stand for and why is there an "18" in the middle? Even as a front
 
 > The design and development of a product, application or document content that **enables** easy localization for target audiences that vary in culture, region, or language.
 
-As I rearched more and more about i18n, or internationalization, I realized that this concept hit home, pun intended, in more of a direct way that I thought. So many of the little bickering disagreements that me and my wife get into have so much to do not only with both of our words getting lost in translation, but how we are translating each other's words back to ourselves internally. i18n deals with just that and acts as a marriage counselor or mediator in a way for translation strings themselves.
+As I researched more and more about i18n, or internationalization, I realized that this concept hit home, pun intended, in more of a direct way that I thought. So many of the little bickering disagreements that me and my wife get into have so much to do not only with both of our words getting lost in translation, but how we are translating each other's words back to ourselves internally. i18n deals with just that and acts as a marriage counselor or mediator in a way for translation strings themselves.
 
 By following the link above, we can see that there are multiple areas of development. The one we'll concentrate on in this article is:
 
