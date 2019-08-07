@@ -1,15 +1,21 @@
 # Lost in Translation... Strings
-# Part 1: i18n for Angular applications
+# Part 1 of 6: i18n for Angular Applications
 
 > Image
 
-## Background
+## The Background on Being Lost
+
+So, I'm a married developer and while I love my wife and love being married, marriage can be difficult. Communication can be difficult. Not to mention the added layer of English being my second language and my wife's first language. 
+
+The last couple of months I have been working on a project at work, that like oh-so-many projects, involves translation strings. I kept pushing what I though was the finalized version of the project to production only to find out that the translation strings from the translation team were holding the project back. I then did a deep dive into i18n for Angular applications. 
 
 What does i18n stand for and why is there an "18" in the middle? Even as a front-end engineer I had no idea until I looked it up of course. It's the number of letters between "i" and "n" in the word "internationalization." So, i18n is internationalization. Pretty neat. One of the [definitions](https://medium.com/r/?url=https%3A%2F%2Fwww.w3.org%2FInternational%2Fquestions%2Fqa-i18n) of i18n is:
 
 > The design and development of a product, application or document content that **enables** easy localization for target audiences that vary in culture, region, or language.
 
-By following the link above we can see that there are multiple areas of development. The one we'll concentrate on in this article is:
+As I rearched more and more about i18n, or internationalization, I realized that this concept hit home, pun intended, in more of a direct way that I thought. So many of the little bickering disagreements that me and my wife get into have so much to do not only with both of our words getting lost in translation, but how we are translating each other's words back to ourselves internally. i18n deals with just that and acts as a marriage counselor or mediator in a way for translation strings themselves.
+
+By following the link above, we can see that there are multiple areas of development. The one we'll concentrate on in this article is:
 
 > Separating localizable elements from source code or content, such that localized alternatives can be loaded or selected based on the user's international preferences as needed.
 
