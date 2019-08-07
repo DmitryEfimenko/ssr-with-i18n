@@ -7,7 +7,7 @@
 
 So, I'm a married. While I love my wife and love being married, marriage can be difficult. Communication can be difficult. Not to mention the added layer of English being my second language and my wife's first language. 
 
-The last couple of months I have been working on a project at work, that like oh-so-many projects, involves translation strings. I kept pushing what I though was the finalized version of the project to production only to find out that the translation strings from the translation team were holding the project back. I then did a deep dive into i18n for Angular applications. 
+The last couple of months I have been working on a project at work, that like oh-so-many projects, involves translation strings. I kept pushing what I thought was the finalized version of the project to production only to find out that the translation strings from the translation team were holding the project back. I then did a deep dive into i18n for Angular applications. 
 
 What does i18n stand for and why is there an "18" in the middle? Even as a front-end engineer I had no idea until I looked it up of course. It's the number of letters between "i" and "n" in the word "internationalization." So, i18n is internationalization. Pretty neat. One of the [definitions](https://medium.com/r/?url=https%3A%2F%2Fwww.w3.org%2FInternational%2Fquestions%2Fqa-i18n) of i18n is:
 
