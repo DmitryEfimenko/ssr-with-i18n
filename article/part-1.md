@@ -1,4 +1,5 @@
-# Lost in translation... strings - Part 1: i18n for Angular applications
+# Lost in Translation... Strings
+# Part 1: i18n for Angular applications
 
 > Image
 
