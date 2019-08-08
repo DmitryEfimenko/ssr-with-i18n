@@ -1,9 +1,10 @@
-# Lost in translation... strings - Part 4: i18n for Server-Side Rendered Angular applications
+# Lost in Translation... Strings
+# Part 4: i18n for Server-Side Rendered Angular applications
 
 ## Previously
 TODO
 
-## A better way
+## A Better Solution
 
 ### Option 2. Provide everything in a single module
 
