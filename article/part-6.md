@@ -1,5 +1,5 @@
 # Lost in Translation... Strings
-# Part 6: i18n for Server-Side Rendered Angular Applications
+# Part 6 of 6: i18n for Server-Side Rendered Angular Applications
 
 ## Previously
 TODO
