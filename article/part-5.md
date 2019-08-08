@@ -1,9 +1,10 @@
-# Lost in translation... strings - Part 5: i18n for Server-Side Rendered Angular applications
+# Lost in Translation... Strings
+# Part 5 of 6: i18n for Server-Side Rendered Angular Applications
 
 ## Previously
 TODO
 
-## Improve performance with TransferState
+## Improve Performance with TransferState
 
 If we run our app in its current state and take a look at the network tab of the Chrome Developer Tools, we'll see that after initial load, the app will make a request to load the JSON file for the currently selected language.
 
