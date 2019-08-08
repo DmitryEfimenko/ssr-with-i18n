@@ -4,7 +4,7 @@
 ## Previously
 TODO
 
-## Adding SSR to the app
+## Adding SSR to the App
 
 Angular CLI is amazing! In particular, its schematics feature allows us to add new capabilities to the app using a simple command. In this case, we'll run the following command to add SSR capabilities:
 
@@ -59,7 +59,7 @@ Now that the issues are identified, let's examine different ways to solve these 
 
 *** The code up to this point is available [here](https://medium.com/r/?url=https%3A%2F%2Fgithub.com%2FDmitryEfimenko%2Fssr-with-i18n%2Ftree%2Fstep-3).
 
-## Evaluating existing options
+## Evaluating Existing Options
 
 There are a few ways that we can make everything work. There is a closed issue in the ngx-translate repository related to enabling SSR - [issue #754](https://medium.com/r/?url=https%3A%2F%2Fgithub.com%2Fngx-translate%2Fcore%2Fissues%2F754). A few solutions to the issue can be found there.
 
@@ -69,7 +69,7 @@ One of the latest comments to the issue suggests using a solution found in the a
 
 Even though the solution works, it feels a bit awkward to me to create an interceptor that will patch the path of the request. In addition, why should we be making an extra request (even though it's local) when we have access to the files through the file system? Let's see what other options are available.
 
-### Fix via importing JSON files directly
+### Fix via Importing JSON Files Directly
 
 A few recent comments on the same [issue #754](https://medium.com/r/?url=https%3A%2F%2Fgithub.com%2Fngx-translate%2Fcore%2Fissues%2F754) suggest importing the contents of JSON files straight into the file which defines our module. Then we can check which environment we're running in and either use the default `TranslateHttpLoader` or a custom one, which uses the imported JSON.
 
@@ -112,7 +112,7 @@ TranslateModule.forRoot({
 
 With this method, the translations for all the languages will be bundled together with the run-time JavaScript compromising performance.
 
-## A better way - prerequisites
+## A Better Way - Prerequisites
 TODO: 
 
 TODO: about injecting REQUEST into Angular, why it needs to be @Optional
