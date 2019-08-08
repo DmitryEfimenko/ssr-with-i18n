@@ -1,9 +1,10 @@
-# Lost in translation... strings - Part 6: i18n for Server-Side Rendered Angular applications
+# Lost in Translation... Strings
+# Part 6: i18n for Server-Side Rendered Angular Applications
 
 ## Previously
 TODO
 
-## Are we there yet?
+## Are We There Yet?
 
 Whether you've chosen to go with the option 1 or 2, it seems like it's all working now! Let's close the Chrome Developer Tools and enjoy the feeling of accomplishment after a lot of work.
 
