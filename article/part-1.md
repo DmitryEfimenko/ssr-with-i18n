@@ -1,19 +1,20 @@
 # Lost in Translation... Strings
-# Part 1 of 6: i18n for Angular Applications
 
 > Image
 
-## The Background on Being Lost
+# Part 1 of 6 - i18n for Angular Applications
+
+## 🤔 The Background on Being Lost
 
 So, I'm a married. While I love my wife and love being married, marriage can be difficult. Communication can be difficult. Not to mention the added layer of English being my second language and my wife's first language. 
 
-Thinking about curtailing my communication with my wife is an ongoing process that has allowed me to make a relevant associative connection to a issue I was having with translation strings and code maintainability. In order to find a more encompassing solution to this difficult issue, I took deep dive into i18n for Angular applications. 
+Thinking about curtailing my communication with my wife is an ongoing process that has allowed me to make a relevant associative connection to an issue I was having with translation strings and code maintainability. In order to find a more encompassing solution to this difficult issue, I took deep dive into i18n for Angular applications. 
 
-What does i18n stand for and why is there an "18" in the middle? Even as a front-end engineer I had no idea until I looked it up. It's the number of letters between "i" and "n" in the word "internationalization." So, i18n is internationalization. Pretty neat. One of the [definitions](https://medium.com/r/?url=https%3A%2F%2Fwww.w3.org%2FInternational%2Fquestions%2Fqa-i18n) of i18n is:
+What does i18n stand for and why is there an "18" in the middle? Even as a front-end engineer I had no idea until I looked it up. It's the number of letters between "i" and "n" in the word "internationalization." So, i18n is internationalization. Pretty neat. One of the [definitions](https://www.w3.org/International/questions/qa-i18n) of i18n is:
 
 > The design and development of a product, application or document content that **enables** easy localization for target audiences that vary in culture, region, or language.
 
-As I researched more and more about i18n, or internationalization, I realized that this concept hit home, pun intended, in more of a direct way that I thought. Many of the minor disagreements that me and my wife get into have so much to do with not only words getting lost in translation, but how her and I translate each other's words back to ourselves internally. Improving communication in marriage is and will always be a work in progress with the main going being quite similar to that of i18n. The goal being to enable easier understanding on the other end and for my wife and me to know that the intentions of what we mean to convey (the "source code") is separate from the sometimes fumbled words that we choose to use (the "translation strings"). 
+As I researched more and more about i18n, or internationalization, I realized that this concept hit home, pun intended, in more of a direct way that I thought. Many of the minor disagreements that me and my wife get into have so much to do with not only words getting lost in translation, but how her and I translate each other's words back to ourselves internally. Improving communication in marriage is and will always be a work in progress with the main goal being quite similar to that of i18n. The goal being to enable easier understanding on the other end and for my wife and me to know that the intentions of what we mean to convey (the "source code") is separate from the sometimes fumbled words that we choose to use (the "translation strings"). 
 
 By following the link above, we can see that there are multiple areas of development that i18n touches on. However, the area we'll concentrate on in this article is:
 
@@ -23,19 +24,21 @@ In essence, whatever should be displayed in different languages needs to be sepa
 
 In the article, we will apply i18n capabilities to a simple Angular application, so that we can see and discover how separating translation strings from the source code can improve maintainability. 
 
-We will explore how to:
+We will explore how to implement our translation strings in a maintainable manner, enable the application to load only necessary resources, and allow browser memorization of the selected language. Then we will enable Server-Side Rendering (SSR) and solve issues encountered during enabling SSR in the Angular application.
 
-1. Implement our translation strings in a maintainable manner
-2. Enable the application to load only necessary resources
-3. Allow browser memorization of the selected language
-4. Enable Server-Side Rendering (SSR)
-5. Manage issues encountered during enabling SSR in the Angular application (which makes use of i18n)
+The article is split up in the following parts:
+Part 1. Setting the Scene
+Part 2.
+Part 3.
+Part 4.
+Part 5.
+Part 6.
 
-In the first part of this article, we will follow simple instructions for setting up an Angular application and adding i18n capabilities to it. Beginner-level developers may want to take a deep dive into the sections that follow. More advanced developers may glance at the code in the following sections and proceed to the "Adding SSR to the App" section to find out what obstacles adding SSR will create and how to solve them.
+In the first part of this article, we will follow simple instructions for setting up an Angular application and adding i18n capabilities to it. Beginner-level developers may want to take a deep dive into the sections that follow. More advanced developers may glance at the code in the following sections and proceed to the "Adding SSR to the App" part to find out what obstacles adding SSR will create and how to solve them.
 
-## Setting the Scene
+## 📝 Setting the Scene
 
-For the purposes of this article, we'll work with a bare-bones Angular application generated with [AngularCLI](https://medium.com/r/?url=https%3A%2F%2Fcli.angular.io%2F). To follow along with the article, we will generate an app using the command (assuming the Angular CLI installed globally):
+For the purposes of this article, we'll work with a bare-bones Angular application generated with [AngularCLI](https://cli.angular.io/). To follow along with the article, we will generate an app using the command (assuming the Angular CLI installed globally):
 
 ```
 ng new ssr-with-i18n
@@ -47,7 +50,7 @@ ng g c comp-a
 ng g c comp-b
 ```
 
-Now we will replace the contents of app.component.html with these two components:
+Now, we will replace the contents of app.component.html with these two components:
 
 ```html
 <h1>Welcome to {{ title }}!</h1>
@@ -55,13 +58,13 @@ Now we will replace the contents of app.component.html with these two components
 <app-comp-b></app-comp-b>
 ```
 
-*** The code up to this point is available [here](https://medium.com/r/?url=https%3A%2F%2Fgithub.com%2FDmitryEfimenko%2Fssr-with-i18n%2Ftree%2Fstep-1).
+*** The code up to this point is available [here](https://github.com/DmitryEfimenko/ssr-with-i18n/tree/step-1).
 
-## Let's Add i18n
+## 🗺️ Let's Add i18n
 
-As with most things in coding, there are many ways to skin a cat. In this article, we'll use a popular library: [ngx-translate](https://medium.com/r/?url=https%3A%2F%2Fgithub.com%2Fngx-translate%2Fcore). 
+As with most things in coding, there are many ways to skin a cat. In this article, we'll use a popular library: [ngx-translate](https://github.com/ngx-translate/core). 
 
-Originally, I wanted to use the framework-independent library [i18next](https://medium.com/r/?url=https%3A%2F%2Fwww.i18next.com%2F) with an Angular wrapper: [angular-i18next](https://medium.com/r/?url=https%3A%2F%2Fgithub.com%2FRomanchuk%2Fangular-i18next). However, there is currently a [big limitation](https://medium.com/r/?url=https%3A%2F%2Fgithub.com%2FRomanchuk%2Fangular-i18next%2Fpull%2F11%23issuecomment-364725022) with angular-i18next: it's not capable of switching language on the fly, which is a show-stopper for me.
+Originally, I wanted to use the framework-independent library [i18next](https://www.i18next.com/) with an Angular wrapper: [angular-i18next](https://github.com/Romanchuk/angular-i18next). However, there is currently a [big limitation](https://github.com/Romanchuk/angular-i18next/pull/11#issuecomment-364725022) with angular-i18next: it's not capable of switching language on the fly, which is a show-stopper for me.
 
 Using ngx-translate will allow us to store our strings in separate JSON files (a file per language) where each string will be represented by a key-value pair. The key is a string identifier and the value is the translation of the string.
 
@@ -83,7 +86,7 @@ ng g m i18n --module app
 
 This will add a new file: `/i18n/i18n.module.ts` and reference it in the `app.module.ts`.
 
-Modify the `i18n.module.ts` file according to the [documentation](https://medium.com/r/?url=https%3A%2F%2Fgithub.com%2Fngx-translate%2Fcore%23configuration). The full file code is below.
+Modify the `i18n.module.ts` file according to the [documentation](https://github.com/ngx-translate/core#configuration). The full file code is below.
 
 ```ts
 import { NgModule } from '@angular/core';
@@ -192,9 +195,9 @@ Run the application and see that the language can now be switched on the fly. Se
 
 Now, if we select the language `ru` and refresh the browser, we'll see that the page loaded with the language `en` selected. The browser does not have a mechanism for remembering the selected language. Let's fix that.
 
-## Memorizing the Selected Language
+## 🙄 Memorizing the Selected Language
 
-The Angular community has made many [plugins](https://medium.com/r/?url=https%3A%2F%2Fgithub.com%2Fngx-translate%2Fcore%23plugins) enhancing the functionality of the ngx-translate package. One of them is exactly what we need - [ngx-translate-cache](https://medium.com/r/?url=https%3A%2F%2Fgithub.com%2Fjgpacheco%2Fngx-translate-cache). By following instructions, we'll (1) install the package
+The Angular community has made many [plugins](https://github.com/ngx-translate/core#plugins) enhancing the functionality of the ngx-translate package. One of them is exactly what we need - [ngx-translate-cache](https://github.com/jgpacheco/ngx-translate-cache). By following instructions, we'll (1) install the package
 
 ```
 npm install ngx-translate-cache --save
@@ -242,4 +245,4 @@ Now, if we select the language `ru` and refresh the browser we'll see that it re
 
 Up until now there really was nothing special about this article. We simply followed instructions posted in relevant packages and encapsulated the i18n related logic in a separate module. Adding SSR has some tricky parts, so let's take a closer look.
 
-*** The code up to this point is available [here](https://medium.com/r/?url=https%3A%2F%2Fgithub.com%2FDmitryEfimenko%2Fssr-with-i18n%2Ftree%2Fstep-2).
+*** The code up to this point is available [here](https://github.com/DmitryEfimenko/ssr-with-i18n/tree/step-2).

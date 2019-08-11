@@ -1,12 +1,7 @@
 # Lost in Translation... Strings
 # Part 3 of 6: i18n for Server-Side Rendered Angular Applications
 
-## Previously
-TODO
-
-## A Better Solution
-
-### Option 1. Fix via providing a separate I18nModule for the server.
+## 👌 Solution 1. Fix via Providing a Separate I18nModule for the Server
 
 Currently, our application looks like this:
 
@@ -66,10 +61,18 @@ export function translateFSLoaderFactory() {
 
 There are two main things happening in the code above.
 
-First, we make use of the REQUEST injection token provided by Angular to get a hold of the full request object. Then we access the cookies object to find out what language the user selected in the browser. Finally, we call the use method of the `TranslateService` class so that our website gets rendered in that language.
+First, we make use of the REQUEST injection token provided by Angular to get a hold of the full request object. Then we access the cookies object to find out what language the user selected in the browser. We call the `use` method of the `TranslateService` class so that our website gets rendered in that language.
 
-Second, the action above will trigger our custom loading mechanism defined in the `TranslateFsLoader` class. There, we simply use standard node API to read files from the file system (fs).
+Second, the action above will trigger our custom loading mechanism defined in the `TranslateFsLoader` class. In the class we simply use standard node API to read files from the file system (fs).
 
-I like this option because it comes with a clear separation between the code that runs on the server and the code that runs in the browser. Introducing the `AppBrowserModule` establishes the architecture for handling cases when the server- and client-side logic significantly differs.
+## Solution 1 Summary
+
+This solution completely separates the compilation path for the server from the compilation path for the browser. ISSUE 1 is solved due to the `translate.getBrowserLang()` existing only in the `I18nBrowserModule`, which will never run in the server environment.
+
+ISSUE 2 is similarly solved by each I18n Module -- the Server and the Browser modules -- using their own Translation Loader mechanism - the `TranslateFsLoader` and `TranslateHttpLoader` respectively.
+
+I like this option because it comes with a clear separation between the code that runs on the server and the code that runs in the browser. Introducing the `AppBrowserModule` establishes the architecture for handling cases when the server- and client-side logic significantly differs. Perhaps this approach is best suited for larger applications.
 
 However, there is one more approach to tackle this task. Keep reading!
+
+*** The code up to this point is available [here](https://github.com/DmitryEfimenko/ssr-with-i18n/tree/step-4).
