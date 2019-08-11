@@ -7,6 +7,8 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { Observable, of } from 'rxjs';
 
+const i18nMap = require('../../assets/i18n/autogen/map.json');
+
 export class TranslateBrowserLoader implements TranslateLoader {
   constructor(
     private transferState: TransferState,
@@ -19,10 +21,12 @@ export class TranslateBrowserLoader implements TranslateLoader {
     const key = makeStateKey<any>('transfer-translate-' + lang);
     const data = this.transferState.get(key, null);
 
+    const suffix = `.${i18nMap[lang]}${this.suffix}`;
+
     // First we are looking for the translations in transfer-state, if none found, http load as fallback
     return data
       ? of(data)
-      : new TranslateHttpLoader(this.http, this.prefix, this.suffix).getTranslation(lang);
+      : new TranslateHttpLoader(this.http, this.prefix, suffix).getTranslation(lang);
   }
 }
 
@@ -48,7 +52,8 @@ export class TranslateFSLoader implements TranslateLoader {
 }
 
 export function translateLoaderFactory(httpClient: HttpClient, transferState: TransferState, platform: any) {
+  const prefix = './assets/i18n/autogen/';
   return isPlatformBrowser(platform)
-    ? new TranslateBrowserLoader(transferState, httpClient)
-    : new TranslateFSLoader(transferState);
+    ? new TranslateBrowserLoader(transferState, httpClient, prefix)
+    : new TranslateFSLoader(transferState, prefix);
 }
