@@ -46,7 +46,7 @@ export class I18nModule {
 
     const browserLang = isPlatformBrowser(this.platform)
       ? translateCacheService.getCachedLanguage() || translate.getBrowserLang() || 'en'
-      : this.getLangFromServerSideCookie();
+      : this.getLangFromServerSideCookie() || 'en';
 
     translate.use(browserLang.match(/en|ru/) ? browserLang : 'en');
   }

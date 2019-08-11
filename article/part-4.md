@@ -1,28 +1,25 @@
 # Lost in Translation... Strings
 # Part 4 of 6: i18n for Server-Side Rendered Angular applications
 
-## Previously
-TODO
+## 👌 Solution 2. Provide Everything in a Single Module
 
-## A Better Solution
+Now that we looked at Solution 1, let's examine another way. In contrast to the Solution 1, this solution does not require the creation of new modules. Instead, all code will be placed inside of the `I18nModule`. This can be achieved using the `isPlatformBrowser` function provided by the Angular framework.
 
-### Option 2. Provide everything in a single module
+Let's come back to the [STEP 3 Checkpoint](https://github.com/DmitryEfimenko/ssr-with-i18n/tree/step-3).
 
-In contrast to the previous option, this option does not require the creation of new modules. Instead, all code will be placed inside of the `I18nModule`. This can be achieved using the `isPlatformBrowser` function provided by the Angular framework.
-
-Let's come back to the step-3 checkpoint.
-
+```
 git checkout step-3
+```
 
 We'll reuse the `TranslateFSLoader` class we created in the previous step. However, we'll make the `I18nModule` aware of the platform it's running in and use the appropriate Loader depending on the environment.
 
-Add the `TransferState` and the `PLATFORM_ID` to the deps of the `translateLoaderFactory`. This will allow us to change the factory implementation to be the following:
+Add the `PLATFORM_ID` to the deps of the `translateLoaderFactory`. This will allow us to select the loader in the factory depending on the current platform:
 
 ```ts
-export function translateLoaderFactory(httpClient: HttpClient, transferState: TransferState, platform: any) {
+export function translateLoaderFactory(httpClient: HttpClient, platform: any) {
   return isPlatformBrowser(platform)
-    ? new TranslateBrowserLoader(transferState, httpClient)
-    : new TranslateFSLoader(transferState);
+    ? new TranslateBrowserLoader(httpClient)
+    : new TranslateFSLoader();
 }
 ```
 
@@ -45,7 +42,7 @@ export class I18nModule {
 
     const browserLang = isPlatformBrowser(this.platform)
       ? translateCacheService.getCachedLanguage() || translate.getBrowserLang() || 'en'
-      : this.getLangFromServerSideCookie();
+      : this.getLangFromServerSideCookie() || 'en';
 
     translate.use(browserLang.match(/en|ru/) ? browserLang : 'en');
   }
@@ -69,7 +66,7 @@ That's because the `fs` and the `path` dependencies, which are strictly node dep
 
 We, as developers, know that these node dependencies won't be used because they are behind appropriate `if` statements, but the compiler does not know that.
 
-There is an easy fix for this issue as well. We can let our compiler know not to include these dependencies in the browser environment using a new [browser](https://medium.com/r/?url=https%3A%2F%2Fgithub.com%2Fdefunctzombie%2Fpackage-browser-field-spec) field of the `package.json` file.
+There is an easy fix for this issue as well. We can let our compiler know not to include these dependencies in the browser environment using a new [browser](https://github.com/defunctzombie/package-browser-field-spec) field of the `package.json` file.
 
 Add the following to the `package.json` file.
 
@@ -82,6 +79,15 @@ Add the following to the `package.json` file.
 
 Now, everything will compile and run exactly the same as with the previous solution.
 
+## Solution 2 Summary
+
+Both ISSUE 1 and ISSUE 2 are solved by separating browser-specific code from the server-specific code via an `if` statement that evaluates the current platform:
+```
+isPlatformBrowser(this.platform)
+```
+
+Now that there is only a single path of compilation for both platforms, `fs` and `path` dependencies that are strictly node dependencies cause a compilation-time error when the build process compiles a browser bundle. This is solved by specifying these dependencies in the `browser` field of the `package.json` file and setting their values to `false`.
+
 I like this option because it's simpler from the perspective of the consumer application. There's no need to create additional modules.
 
-*** The code up to this point is available [here](https://medium.com/r/?url=https%3A%2F%2Fgithub.com%2FDmitryEfimenko%2Fssr-with-i18n%2Ftree%2Fstep-6).
+*** The code up to this point is available [here](https://github.com/DmitryEfimenko/ssr-with-i18n/tree/step-6).

@@ -1,10 +1,4 @@
-# Lost in Translation... Strings
-# Part 2 of 6: i18n for Server-Side Rendered Angular Applications
-
-## Previously
-TODO
-
-## Adding SSR to the App
+## 💪️ Part 2 of 6: Adding SSR to the App
 
 Angular CLI is amazing! In particular, its schematics feature allows us to add new capabilities to the app using a simple command. In this case, we'll run the following command to add SSR capabilities:
 
@@ -51,27 +45,24 @@ Let's see why this is happening. Notice the factory function used in the `Transl
 
 This brings us to the two issues we need to solve:
 
-1. Being able to determine the correct language to load in both the client and the server environments (instead of hard-coding the value to `en`).
-
-2. Based on the environment, use the appropriate mechanism to load the JSON file containing translations.
+ISSUE 1. Being able to determine the correct language to load in both the client and the server environments (instead of hard-coding the value to `en`).
+ISSUE 2. Based on the environment, use the appropriate mechanism to load the JSON file containing translations.
 
 Now that the issues are identified, let's examine different ways to solve these issues.
 
-*** The code up to this point is available [here](https://medium.com/r/?url=https%3A%2F%2Fgithub.com%2FDmitryEfimenko%2Fssr-with-i18n%2Ftree%2Fstep-3).
+## 🤔 Evaluating Existing Options
 
-## Evaluating Existing Options
+There are a few ways that we can make everything work. There is a closed issue in the ngx-translate repository related to enabling SSR - [issue #754](https://github.com/ngx-translate/core/issues/754). A few solutions to these issues can be found there.
 
-There are a few ways that we can make everything work. There is a closed issue in the ngx-translate repository related to enabling SSR - [issue #754](https://medium.com/r/?url=https%3A%2F%2Fgithub.com%2Fngx-translate%2Fcore%2Fissues%2F754). A few solutions to the issue can be found there.
+### Existing Solution 1. Fix via HttpInterceptor
 
-### Fix via HttpInterceptor
-
-One of the latest comments to the issue suggests using a solution found in the article "[Angular Universal: How to add multi language support?](https://medium.com/r/?url=https%3A%2F%2Fitnext.io%2Fangular-universal-how-to-add-multi-language-support-68d83f6dfc4d)" In the article, the author suggests fixing the issue using the `HttpInterceptor`, which patches the requests to the JSON files while on the server.
+One of the latest comments to the issue #754 suggests using a solution found in the article "[Angular Universal: How to add multi language support?](https://itnext.io/angular-universal-how-to-add-multi-language-support-68d83f6dfc4d)" to address the ISSUE 2. Unfortunately, ISSUE 1 is not addressed in the article. The author suggests a fix using the `HttpInterceptor`, which patches the requests to the JSON files while on the server.
 
 Even though the solution works, it feels a bit awkward to me to create an interceptor that will patch the path of the request. In addition, why should we be making an extra request (even though it's local) when we have access to the files through the file system? Let's see what other options are available.
 
-### Fix via Importing JSON Files Directly
+### Existing Solution 2. Fix via Importing JSON Files Directly
 
-A few recent comments on the same [issue #754](https://medium.com/r/?url=https%3A%2F%2Fgithub.com%2Fngx-translate%2Fcore%2Fissues%2F754) suggest importing the contents of JSON files straight into the file which defines our module. Then we can check which environment we're running in and either use the default `TranslateHttpLoader` or a custom one, which uses the imported JSON.
+A few recent comments on the same [issue #754](https://github.com/ngx-translate/core/issues/754) suggest importing the contents of JSON files straight into the file which defines our module. Then we can check which environment we're running in and either use the default `TranslateHttpLoader` or a custom one, which uses the imported JSON. This approach suggests a way to handle ISSUE 2 by checking the environment where the code is running: `if (isPlatformBrowser(platform))`. We'll use a similar platform check later in the article.
 
 ```ts
 import { PLATFORM_ID } from "@angular/core";
@@ -108,27 +99,71 @@ TranslateModule.forRoot({
 })
 ```
 
-**Please don't do this!** By importing JSON files like shown above, they will end up in the browser bundle. The whole purpose of using HttpLoader is that it will load the required language file **on demand** making the JavaScript bundle smaller.
+**Please don't do this!** By importing JSON files like shown above, they will end up in the browser bundle. The whole purpose of using HttpLoader is that it will load the required language file **on demand** making the browser bundle smaller.
 
 With this method, the translations for all the languages will be bundled together with the run-time JavaScript compromising performance.
 
-## A Better Way - Prerequisites
-TODO: 
+Although both existing solutions provide a fix for ISSUE 2, they have their shortcomings. One results in unnecesary requests being made and another one compromizes performance. Neither of them provide a solution for ISSUE 1.
 
-TODO: about injecting REQUEST into Angular, why it needs to be @Optional
+## 🔋 A Better Way - Prerequisites
+In the upcoming sections I'll provide two separate solutions to the identified ISSUES. Both of the solutions will require the following prerequisites.
 
-TODO: why we need cookie-parser
+Prerequisite 1. We need to install and use a dependency called [cookie-parser](https://www.npmjs.com/package/cookie-parser).
+Prerequisite 2. Understand the REQUEST injection token
+
+### Prerequisite 1. Why Do We Need cookie-parser?
+In the upcoming solutions we'll need a way to access the cookie on the server. This cookie is named "lang" and is set in the browser when a user chooses a language. By default we can access the information we need from the `req.headers.cookie` object in any of the Express request handlers. The value would look something like this:
+
+```
+lang=en; other-cookie=other-value
+```
+
+This property has all the information we need, but we need to parse the `lang` out. Although it's simple enough, there is no need to reinvent the wheel since `cookie-parser` is an Express middleware that does exactly what we need.
+
+Install the required dependencies.
 
 ```
 npm install cookie-parser
 npm install @types/cookie-parser -D
 ```
 
-Update the `server.ts` file to use the installed `cookie-parser`. This will parse Cookies passed in the request object and store them as a dictionary object under `req.cookies`.
+Update the `server.ts` file to use the installed `cookie-parser`.
 
 ```ts
 import * as cookieParser from 'cookie-parser';
 app.use(cookieParser());
 ```
 
-TODO: transition to the part 3.
+Under the hood, the `cookie-parser` will parse the Cookies and store them as a dictionary object under `req.cookies`.
+
+```json
+{
+  "lang": "en",
+  "other-cookie": "other-value"
+}
+```
+
+### Prerequisite 2. The REQUEST Injection Token
+Now that we have a convenient way of accessing Cookies from the request object, we need to have access to the `req` object in the context of the Angular application. This can easily be done using the `REQUEST` injection token.
+
+```ts
+import { REQUEST } from '@nguniversal/express-engine/tokens';
+import { Request } from 'express';
+
+export class AnyModule {
+  constructor(@Inject(REQUEST) private req: Request) {
+    console.log(req.cookies.lang); // 'en' | 'ru'
+  }
+}
+```
+
+Here's the obvious fact: The `REQUEST` injection token is available under `@nguniversal/express-engine/tokens`. Here is a not so obvious fact: the type for the `req` object is the `Request` provided by type definitions of the `express` library.
+
+This is important and might trip us over. If this import is forgotten, the typescript will assume a different `Request` type from the Fetch API that's available under `lib.dom.d.ts`. As a result, TypeScript will not have knowledge of `req.cookies` object and will underline it with red.
+
+
+## Now We Are Ready for the Solutions
+Please make a mental snapshot of the STEP 3 Checkpoint below. We will use this code as a starting point for the next two parts of this series where we'll explore how to fix the two ISSUES outlined above.
+
+### STEP 3 Checkpoint
+*** The code up to this point is available [here](https://github.com/DmitryEfimenko/ssr-with-i18n/tree/step-3).
