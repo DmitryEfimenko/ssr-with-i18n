@@ -19,16 +19,41 @@ To make use of the TransferState feature, we need to:
 3. On the client: retrieve the data using API: `transferState.get(key, defaultValue)`
 
 ### Our implementation
-First, let's make appropriate changes to the `I18nModule`. The snippet below shows the new code.
+First, let's add the TransferStateModules to the imports:
+```ts
+import { BrowserTransferStateModule, TransferState } from '@angular/platform-browser';
+
+@NgModule({
+  imports: [
+    BrowserTransferStateModule, // ADDED
+    // ...
+  ]
+})
+export class I18nModule {
+  // ...
+}
+```
+```ts
+import { ServerTransferStateModule } from '@angular/platform-server';
+
+@NgModule({
+  imports: [
+    ServerTransferStateModule, // ADDED
+    // ...
+  ],
+  bootstrap: [AppComponent],
+})
+export class AppServerModule { }
+```
+
+Now let's make appropriate changes to the `I18nModule`. The snippet below shows the new code.
 
 ```ts
 // ADDED needed imports from @angular
 import { makeStateKey, TransferState } from '@angular/platform-browser';
-import { ServerTransferStateModule } from '@angular/platform-server';
+
 @NgModule({
   imports: [
-    BrowserTransferStateModule, // ADDED
-    HttpClientModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -39,7 +64,7 @@ import { ServerTransferStateModule } from '@angular/platform-server';
   ]
 })
 export class I18nModule {
-  // code unchanged
+  // ...
 }
 ```
 
