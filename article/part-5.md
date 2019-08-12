@@ -1,20 +1,17 @@
-# Lost in Translation... Strings
-# Part 5 of 6: i18n for Server-Side Rendered Angular Applications
+#@ ⚡ Part 5 of 6: Improve Performance with TransferState
 
-## ⚡️ Improve Performance with TransferState
-
-If we run our app in its current state and take a look at the network tab of the Chrome Developer Tools, we'll see that after initial load the app will make a request to load the JSON file for the currently selected language.
+If we run our app in its current state and take a look at the network tab of the Browser Developer Tools, we'll see that after initial load the app will make a request to load the JSON file for the currently selected language.
 
 This does not make much sense since we've already loaded the appropriate language in the server.
 
-Making an extra request to load language translations that are already loaded might seem like it's not a big issue worth solving. There probably are areas of an application that will result in a bigger bang for the buck in terms of performance tuning. See [this article](https://christianlydemann.com/the-complete-guide-to-angular-load-time-optimization/) for more on this topic. However, for bigger applications, translation files might also get bigger. Therefore, the time to download and process them will also increase, at which point this would be an issue to solve.
+Making an extra request to load language translations that are already loaded might seem like it's not a big issue worth solving. There are probably areas of an application that will result in a bigger bang for the buck in terms of performance tuning. See [this article](https://christianlydemann.com/the-complete-guide-to-angular-load-time-optimization/) for more on this topic. However, for bigger applications, translation files might also get bigger. Therefore, the time to download and process them will also increase, at which point this would be an issue to solve.
 
-Thankfully, Angular Universal provides a tool to solve this issue with relatively little effort: `[TransferState](https://angular.io/api/platform-browser/TransferState)`
+Thankfully, Angular Universal provides a tool to solve this issue with relatively little effort: `[TransferState](https://angular.io/api/platform-browser/TransferState)`. When this solution in use, the server will embed the data with the initial HTML sent to the client. The client will then be able to read this data without the need to ask the server.
 
 ### Overview of the Workflow
 
 To make use of the TransferState feature, we need to:
-1. Add `ServerTransferStateModule` in the server and `BrowserTransferStateModule` on the client
+1. Add the module provided by Angular for the server and for the client: `ServerTransferStateModule` and `BrowserTransferStateModule`
 2. On the server: set the data that we want to transfer under a specific key using API: `transferState.set(key, value)`
 3. On the client: retrieve the data using API: `transferState.get(key, defaultValue)`
 
@@ -68,7 +65,7 @@ export class I18nModule {
 }
 ```
 
-Second, the `translateLoaderFactory` will not look like this:
+Second, the `translateLoaderFactory` will now look like this:
 
 ```ts
 export function translateLoaderFactory(httpClient: HttpClient, transferState: TransferState, platform: any) {
@@ -108,9 +105,9 @@ How does it exactly transfer the state? During the server-side rendering, the fr
 
 Once the client-side bundle bootstraps, it will be able to access this data
 
-Now we need to allow Loader that's used in the browser platform to make use of the transfered data. Currently, our loader factory function simply returns the `TranslateHttpLoader`. We'll have to create a custom loader that will also be capable of handling the transfer state.
+Now we need to allow the client-side Loader to make use of the transfered data. Currently, our loader factory function simply returns the `TranslateHttpLoader`. We'll have to create a custom loader that will also be capable of handling the transfer state.
 
-Let's add the custom loader to the new file. The new loader will look like the one below.
+Let's create a new file to hold the custom loader class. The new loader will look like the one below.
 
 ```ts
 export class TranslateBrowserLoader implements TranslateLoader {

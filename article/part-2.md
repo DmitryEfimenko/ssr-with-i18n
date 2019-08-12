@@ -45,24 +45,24 @@ Let's see why this is happening. Notice the factory function used in the `Transl
 
 This brings us to the two issues we need to solve:
 
-ISSUE 1. Being able to determine the correct language to load in both the client and the server environments (instead of hard-coding the value to `en`).
-ISSUE 2. Based on the environment, use the appropriate mechanism to load the JSON file containing translations.
+PROBLEM 1. Being able to determine the correct language to load in both the client and the server environments (instead of hard-coding the value to `en`).
+PROBLEM 2. Based on the environment, use the appropriate mechanism to load the JSON file containing translations.
 
 Now that the issues are identified, let's examine different ways to solve these issues.
 
 ## 🤔 Evaluating Existing Options
 
-There are a few ways that we can make everything work. There is a closed issue in the ngx-translate repository related to enabling SSR - [issue #754](https://github.com/ngx-translate/core/issues/754). A few solutions to these issues can be found there.
+There are a few ways that we can make everything work. There is a closed issue in the ngx-translate repository related to enabling SSR - [issue #754](https://github.com/ngx-translate/core/issues/754). A few solutions to PROBLEMS 1 and 2 can be found there.
 
 ### Existing Solution 1. Fix via HttpInterceptor
 
-One of the latest comments to the issue #754 suggests using a solution found in the article "[Angular Universal: How to add multi language support?](https://itnext.io/angular-universal-how-to-add-multi-language-support-68d83f6dfc4d)" to address the ISSUE 2. Unfortunately, ISSUE 1 is not addressed in the article. The author suggests a fix using the `HttpInterceptor`, which patches the requests to the JSON files while on the server.
+One of the latest comments on issue #754 suggests using a solution found in the article "[Angular Universal: How to add multi language support?](https://itnext.io/angular-universal-how-to-add-multi-language-support-68d83f6dfc4d)" to address the PROBLEM 2. Unfortunately, PROBLEM 1 is not addressed in the article. The author suggests a fix using the `HttpInterceptor`, which patches the requests to retrieve the JSON files while on the server.
 
 Even though the solution works, it feels a bit awkward to me to create an interceptor that will patch the path of the request. In addition, why should we be making an extra request (even though it's local) when we have access to the files through the file system? Let's see what other options are available.
 
 ### Existing Solution 2. Fix via Importing JSON Files Directly
 
-A few recent comments on the same [issue #754](https://github.com/ngx-translate/core/issues/754) suggest importing the contents of JSON files straight into the file which defines our module. Then we can check which environment we're running in and either use the default `TranslateHttpLoader` or a custom one, which uses the imported JSON. This approach suggests a way to handle ISSUE 2 by checking the environment where the code is running: `if (isPlatformBrowser(platform))`. We'll use a similar platform check later in the article.
+A few recent comments on the same [issue #754](https://github.com/ngx-translate/core/issues/754) suggest importing the contents of JSON files straight into the file which defines our module. Then we can check which environment we're running in and either use the default `TranslateHttpLoader` or a custom one, which uses the imported JSON. This approach suggests a way to handle PROBLEM 2 by checking the environment where the code is running: `if (isPlatformBrowser(platform))`. We'll use a similar platform check later in the article.
 
 ```ts
 import { PLATFORM_ID } from "@angular/core";
@@ -103,16 +103,16 @@ TranslateModule.forRoot({
 
 With this method, the translations for all the languages will be bundled together with the run-time JavaScript compromising performance.
 
-Although both existing solutions provide a fix for ISSUE 2, they have their shortcomings. One results in unnecesary requests being made and another one compromizes performance. Neither of them provide a solution for ISSUE 1.
+Although both existing solutions provide a fix for PROBLEM 2, they have their shortcomings. One results in unnecesary requests being made and another one compromizes performance. Neither of them provide a solution for PROBLEM 1.
 
 ## 🔋 A Better Way - Prerequisites
-In the upcoming sections I'll provide two separate solutions to the identified ISSUES. Both of the solutions will require the following prerequisites.
+In the upcoming sections I'll provide two separate solutions to the identified PROBLEMS. Both of the solutions will require the following prerequisites.
 
 Prerequisite 1. We need to install and use a dependency called [cookie-parser](https://www.npmjs.com/package/cookie-parser).
-Prerequisite 2. Understand the REQUEST injection token
+Prerequisite 2. Understand the Angular REQUEST injection token
 
 ### Prerequisite 1. Why Do We Need cookie-parser?
-In the upcoming solutions we'll need a way to access the cookie on the server. This cookie is named "lang" and is set in the browser when a user chooses a language. By default we can access the information we need from the `req.headers.cookie` object in any of the Express request handlers. The value would look something like this:
+ngx-translate-cache library is in charge of creating a cookie in the client when a user selects language. By default (although it can be configured) the cookie is named `lang`. In the upcoming solutions we'll need a way to access this cookie on the server. By default we can access the information we need from the `req.headers.cookie` object in any of the Express request handlers. The value would look something like this:
 
 ```
 lang=en; other-cookie=other-value
@@ -143,7 +143,7 @@ Under the hood, the `cookie-parser` will parse the Cookies and store them as a d
 }
 ```
 
-### Prerequisite 2. The REQUEST Injection Token
+### Prerequisite 2. The Angular REQUEST Injection Token
 Now that we have a convenient way of accessing Cookies from the request object, we need to have access to the `req` object in the context of the Angular application. This can easily be done using the `REQUEST` injection token.
 
 ```ts
@@ -163,7 +163,7 @@ This is important and might trip us over. If this import is forgotten, the types
 
 
 ## Now We Are Ready for the Solutions
-Please make a mental snapshot of the STEP 3 Checkpoint below. We will use this code as a starting point for the next two parts of this series where we'll explore how to fix the two ISSUES outlined above.
+Please make a mental snapshot of the STEP 3 Checkpoint below. We will use this code as a starting point for the next two parts of this series where we'll explore how to fix the two PROBLEMS outlined above.
 
 ### STEP 3 Checkpoint
 *** The code up to this point is available [here](https://github.com/DmitryEfimenko/ssr-with-i18n/tree/step-3).
