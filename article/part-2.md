@@ -166,4 +166,4 @@ This is important and might trip us over. If this import is forgotten, the types
 Please make a mental snapshot of the STEP 3 Checkpoint below. We will use this code as a starting point for the next two parts of this series where we'll explore how to fix the two PROBLEMS outlined above.
 
 ### STEP 3 Checkpoint
-*** The code up to this point is available [here](https://github.com/DmitryEfimenko/ssr-with-i18n/tree/step-3).
+*** The code up to this point is available [here](https://github.com/DmitryEfimenko/ssr-with-i18n/tree/step-2).

@@ -49,7 +49,7 @@ Now, we will replace the contents of app.component.html with these two component
 <app-comp-b></app-comp-b>
 ```
 
-*** The code up to this point is available [here](https://github.com/DmitryEfimenko/ssr-with-i18n/tree/step-1).
+*** The code up to this point is available [here](https://github.com/DmitryEfimenko/ssr-with-i18n/tree/step-1-a).
 
 ## 🗺️ Let's Add i18n
 
@@ -238,4 +238,4 @@ Now, if we select the language `ru` and refresh the browser we'll see that it re
 
 Up until now there really was nothing special about this article. We simply followed instructions posted in relevant packages and encapsulated the i18n related logic in a separate module. Adding SSR has some tricky parts, so let's take a closer look.
 
-*** The code up to this point is available [here](https://github.com/DmitryEfimenko/ssr-with-i18n/tree/step-2).
+*** The code up to this point is available [here](https://github.com/DmitryEfimenko/ssr-with-i18n/tree/step-1-b).

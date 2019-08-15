@@ -72,4 +72,4 @@ I like this option because it comes with a clear separation between the code tha
 
 However, there is one more approach to tackle this task. Keep reading!
 
-*** The code up to this point is available [here](https://github.com/DmitryEfimenko/ssr-with-i18n/tree/step-4).
+*** The code up to this point is available [here](https://github.com/DmitryEfimenko/ssr-with-i18n/tree/step-3).

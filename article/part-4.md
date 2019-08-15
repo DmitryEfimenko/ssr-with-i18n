@@ -87,4 +87,4 @@ Now that there is only a single path of compilation for both platforms, `fs` and
 
 I like this option because it's simpler from the perspective of the consumer application. There's no need to create additional modules.
 
-*** The code up to this point is available [here](https://github.com/DmitryEfimenko/ssr-with-i18n/tree/step-5).
+*** The code up to this point is available [here](https://github.com/DmitryEfimenko/ssr-with-i18n/tree/step-4).

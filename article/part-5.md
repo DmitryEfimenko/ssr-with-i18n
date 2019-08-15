@@ -144,5 +144,5 @@ export class TranslateBrowserLoader implements TranslateLoader {
 Using TransferState allowed us to avoid loading data from the browser that was already loaded in the server. 
 Now, if we run the application we'll see that there is no unneeded request to the JSON file for the currently selected language in the network tab.
 
-*** The code up to this point is available [here](https://github.com/DmitryEfimenko/ssr-with-i18n/tree/step-6).
+*** The code up to this point is available [here](https://github.com/DmitryEfimenko/ssr-with-i18n/tree/step-5).
 
