@@ -1,14 +1,14 @@
 ## 👌 Part 4 of 6: Solution 2 - Provide Everything in a Single Module
 
-Now that we looked at Solution 1, let's examine another way. In contrast to the Solution 1, this solution does not require the creation of new modules. Instead, all code will be placed inside of the `I18nModule`. This can be achieved using the `isPlatformBrowser` function provided by the Angular framework.
+Now that we looked at Solution 1, let's examine another way. In contrast to Solution 1, this solution does not require the creation of new modules. Instead, all code will be placed inside of the `I18nModule`. This can be achieved using the `isPlatformBrowser` function provided by the Angular framework.
 
-Let's come back to the [STEP 3 Checkpoint](https://github.com/DmitryEfimenko/ssr-with-i18n/tree/step-3).
+Let's come back to the [PART 2 Checkpoint](https://github.com/DmitryEfimenko/ssr-with-i18n/tree/step-2).
 
 ```
-git checkout step-3
+git checkout step-2
 ```
 
-Now we'll make the `I18nModule` aware of the platform it's running in and use the appropriate Loader depending on the environment - either the `TranslateFSLoader` created in the previous Part or the `TranslateHttpLoader` provided by ngx-translate library.
+Now we'll make the `I18nModule` aware of the platform it's running in and use the appropriate Loader depending on the environment - either the `TranslateFsLoader` created in the previous Part or the `TranslateHttpLoader` provided by the *ngx-translate* library.
 
 Add the `PLATFORM_ID` to the deps of the `translateLoaderFactory`. This will allow us to select the loader in the factory depending on the current platform.
 
@@ -78,7 +78,7 @@ Now, everything will compile and run exactly the same as with the previous solut
 
 ## Solution 2 Summary
 
-Both PROBLEM 1 and PROBLEM 2 are solved by separating browser-specific code from the server-specific code via an `if` statement that evaluates the current platform:
+Both PROBLEM 1 and PROBLEM 2 are solved by separating the browser-specific code from the server-specific code via an `if` statement that evaluates the current platform:
 ```
 isPlatformBrowser(this.platform)
 ```

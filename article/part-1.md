@@ -25,9 +25,9 @@ Part 4. Solution 2 - Provide Everything in a Single Module
 Part 5. Improve Performance with TransferState
 Part 6. Are We There Yet?
 
-In the first part of this article, we will follow simple instructions for setting up an Angular application and adding i18n capabilities to it. Beginner-level developers may want to take a deep dive into the Part 1. More advanced developers may glance at the code in the following sections and proceed to the "Part 2. Adding SSR to the App" to find out what obstacles adding SSR will create and how to solve them.
+In the first part of this article, we will follow simple instructions for setting up an Angular application and adding i18n capabilities to it. Beginner-level developers may want to take a deep dive into Part 1. More advanced developers may glance at the code in the following sections and proceed to "Part 2. Adding SSR to the App" to find out what obstacles adding SSR will create and how to solve them.
 
-## 📝 # Part 1 of 6 - Setting the Scene
+## 📝 Part 1 of 6 - Setting the Scene
 
 For the purposes of this article, we'll work with a bare-bones Angular application generated with [AngularCLI](https://cli.angular.io/). To follow along with the article, we will generate an app using the command (assuming the Angular CLI installed globally):
 
@@ -53,7 +53,7 @@ Now, we will replace the contents of app.component.html with these two component
 
 ## 🗺️ Let's Add i18n
 
-As with most things in coding, there are many ways to skin a cat. Originally, I wanted to use the framework-independent library [i18next](https://www.i18next.com/) with an Angular wrapper: [angular-i18next](https://github.com/Romanchuk/angular-i18next). However, there is currently a [unfortunate limitation](https://github.com/Romanchuk/angular-i18next/pull/11#issuecomment-364725022) with angular-i18next: it's not capable of switching language on the fly, which is a show-stopper for me.
+As with most things in coding, there are many ways to skin a cat. Originally, I wanted to use the framework-independent library [i18next](https://www.i18next.com/) with an Angular wrapper: [angular-i18next](https://github.com/Romanchuk/angular-i18next). However, there is currently an [unfortunate limitation](https://github.com/Romanchuk/angular-i18next/pull/11#issuecomment-364725022) with angular-i18next: it's not capable of switching language on the fly, which is a show-stopper for me.
 
 In this article, we'll use a popular library: [ngx-translate](https://github.com/ngx-translate/core). 
 
@@ -111,7 +111,7 @@ export function translateLoaderFactory(httpClient: HttpClient) {
 }
 ```
 
-Nothing fancy is going on. We just added the `TranslateModule` and configured it to use the `HttpClient` to load translations. We exported `TranslateModule` as well to make the pipe `transform` available in the `AppModule` and in HTML templates. In the constructor, we specified available languages and used a function provided by ngx-transltate to get and use the browser's default language.
+Nothing fancy is going on. We just added the `TranslateModule` and configured it to use the `HttpClient` to load translations. We exported `TranslateModule` as well to make the pipe `transform` available in the `AppModule` and in HTML templates. In the constructor, we specified available languages and used a function provided by ngx-translate to get and use the browser's default language.
 
 By default, the `TranslateHttpLoader` will load translations from the `/assets/i18n/` folder, so let's add a couple of files there.
 
@@ -148,7 +148,7 @@ Run the application and notice that it's using the translations from the `en.jso
 ng g c select-language --inlineStyle --inlineTemplate
 ```
 
-Update the contents of the select-language.component.ts file.
+Update the contents of the `select-language.component.ts` file.
 
 ```ts
 import { Component } from '@angular/core';

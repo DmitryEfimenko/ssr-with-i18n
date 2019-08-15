@@ -1,6 +1,6 @@
 ## 💪️ Part 2 of 6: Adding SSR to the App
 
-Angular CLI is amazing! In particular, its schematics feature allows us to add new capabilities to the app using a simple command. In this case, we'll run the following command to add SSR capabilities:
+Angular CLI is amazing! In particular, its schematics feature allows us to add new capabilities to the app using a simple command. In this case, we'll run the following command to add SSR capabilities.
 
 ```
 ng add @nguniversal/express-engine --clientProject ssr-with-i18n
@@ -25,7 +25,7 @@ A little bit of investigation reveals that the failing code is:
 browserLang.match(/en|ru/)
 ```
 
-The `browserLang` variable is undefined, which means that the following line of code didn't work:
+The `browserLang` variable is `undefined`, which means that the following line of code didn't work:
 
 ```ts
 const browserLang = translateCacheService.getCachedLanguage() || translate.getBrowserLang();
@@ -103,7 +103,7 @@ TranslateModule.forRoot({
 
 With this method, the translations for all the languages will be bundled together with the run-time JavaScript compromising performance.
 
-Although both existing solutions provide a fix for PROBLEM 2, they have their shortcomings. One results in unnecesary requests being made and another one compromizes performance. Neither of them provide a solution for PROBLEM 1.
+Although both existing solutions provide a fix for PROBLEM 2, they have their shortcomings. One results in unnecessary requests being made and another one compromises performance. Neither of them provides a solution for PROBLEM 1.
 
 ## 🔋 A Better Way - Prerequisites
 In the upcoming sections I'll provide two separate solutions to the identified PROBLEMS. Both of the solutions will require the following prerequisites.
@@ -112,7 +112,7 @@ Prerequisite 1. We need to install and use a dependency called [cookie-parser](h
 Prerequisite 2. Understand the Angular REQUEST injection token
 
 ### Prerequisite 1. Why Do We Need cookie-parser?
-ngx-translate-cache library is in charge of creating a cookie in the client when a user selects language. By default (although it can be configured) the cookie is named `lang`. In the upcoming solutions we'll need a way to access this cookie on the server. By default we can access the information we need from the `req.headers.cookie` object in any of the Express request handlers. The value would look something like this:
+The *ngx-translate-cache* library is in charge of creating a cookie in the client when a user selects the language. By default (although it can be configured) the cookie is named `lang`. In the upcoming solutions we'll need a way to access this cookie on the server. By default we can access the information we need from the `req.headers.cookie` object in any of the Express request handlers. The value would look something like this:
 
 ```
 lang=en; other-cookie=other-value
@@ -163,7 +163,7 @@ This is important and might trip us over. If this import is forgotten, the types
 
 
 ## Now We Are Ready for the Solutions
-Please make a mental snapshot of the STEP 3 Checkpoint below. We will use this code as a starting point for the next two parts of this series where we'll explore how to fix the two PROBLEMS outlined above.
+Please make a mental snapshot of the PART 2 Checkpoint below. We will use this code as a starting point for the next two parts of this series where we'll explore how to fix the two PROBLEMS outlined above.
 
-### STEP 3 Checkpoint
+### PART 2 Checkpoint
 *** The code up to this point is available [here](https://github.com/DmitryEfimenko/ssr-with-i18n/tree/step-2).

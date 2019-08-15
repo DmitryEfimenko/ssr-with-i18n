@@ -1,4 +1,4 @@
-#@ ⚡ Part 5 of 6: Improve Performance with TransferState
+## ⚡ Part 5 of 6: Improve Performance with TransferState
 
 If we run our app in its current state and take a look at the network tab of the Browser Developer Tools, we'll see that after initial load the app will make a request to load the JSON file for the currently selected language.
 
@@ -16,7 +16,7 @@ To make use of the TransferState feature, we need to:
 3. On the client: retrieve the data using API: `transferState.get(key, defaultValue)`
 
 ### Our implementation
-First, let's add the TransferStateModules to the imports:
+First, let's add the TransferState Modules to the imports:
 ```ts
 import { BrowserTransferStateModule, TransferState } from '@angular/platform-browser';
 
@@ -105,7 +105,7 @@ How does it exactly transfer the state? During the server-side rendering, the fr
 
 Once the client-side bundle bootstraps, it will be able to access this data
 
-Now we need to allow the client-side Loader to make use of the transfered data. Currently, our loader factory function simply returns the `TranslateHttpLoader`. We'll have to create a custom loader that will also be capable of handling the transfer state.
+Now we need to allow the client-side Loader to make use of the transferred data. Currently, our loader factory function simply returns the `TranslateHttpLoader`. We'll have to create a custom loader that will also be capable of handling the transfer state.
 
 Let's create a new file to hold the custom loader class. The new loader will look like the one below.
 
@@ -141,7 +141,7 @@ export class TranslateBrowserLoader implements TranslateLoader {
 
 ## TransferState Summary
 
-Using TransferState allowed us to avoid loading data from the browser that was already loaded in the server. 
+Using TransferState allowed us to avoid loading data from the browser that was already loaded on the server. 
 Now, if we run the application we'll see that there is no unneeded request to the JSON file for the currently selected language in the network tab.
 
 *** The code up to this point is available [here](https://github.com/DmitryEfimenko/ssr-with-i18n/tree/step-5).
